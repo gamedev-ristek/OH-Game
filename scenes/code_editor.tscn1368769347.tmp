@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://k00yxy533m0m"]
+
+[ext_resource type="Script" uid="uid://dwptov480eb1o" path="res://scripts/code_editor.gd" id="1_q0psu"]
+[ext_resource type="Script" uid="uid://bk6mdvwax0w12" path="res://code_box.gd" id="2_i4sis"]
+
+[node name="CodeEditor" type="Node2D"]
+script = ExtResource("1_q0psu")
+
+[node name="CodeBox" type="CodeEdit" parent="."]
+offset_left = -156.0
+offset_top = -260.0
+offset_right = 148.0
+offset_bottom = 253.0
+theme_override_colors/executing_line_color = Color(1, 1, 0, 1)
+gutters_draw_executing_lines = true
+gutters_draw_line_numbers = true
+script = ExtResource("2_i4sis")
+
+[node name="RunButton" type="Button" parent="."]
+offset_left = -68.0
+offset_top = 275.0
+offset_right = 79.0
+offset_bottom = 326.0
+text = "RUN"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
