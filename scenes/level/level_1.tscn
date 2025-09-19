@@ -12,6 +12,6 @@ code_editor = NodePath("../CodeEditor")
 position = Vector2(0, 1)
 
 [node name="CodeEditor" parent="." instance=ExtResource("1_cfjva")]
-position = Vector2(398, -33)
+position = Vector2(737, 0)
 
 [node name="Marks" type="Node2D" parent="."]

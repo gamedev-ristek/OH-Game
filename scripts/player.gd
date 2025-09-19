@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var outfit: Sprite2D = $Customizable/Outfit
+@onready var type: Sprite2D = $Customizable/Type
 @onready var timer: Timer = $Timer
 @export var code_editor : Node2D
 @export var mark_scene : PackedScene
@@ -8,7 +10,7 @@ const STEP = 48 # 1 tile size
 enum DIRECTION {LEFT, RIGHT, UP, DOWN}
 
 var reset_pos
-var direction = DIRECTION.UP
+var direction = DIRECTION.DOWN
 var is_moving = false
 var target_pos = Vector2.ZERO
 
@@ -48,6 +50,13 @@ func set_movement(command: String):
 
 func _ready() -> void:
 	reset_pos = global_position
+	
+	outfit.texture = CharacterInformation.outfit
+	CharacterInformation.outfit_updated.connect(_update_outfit)
+	
+	type.texture = CharacterInformation.type
+	CharacterInformation.type_updated.connect(_update_type)
+	
 
 func _process(delta: float) -> void:
 	if is_moving and global_position.distance_to(target_pos) < 1:
@@ -92,3 +101,8 @@ func clear_marks():
 	for mark in marks.get_children():
 		mark.queue_free()
 	
+func _update_outfit() :
+	outfit.texture = CharacterInformation.outfit
+	
+func _update_type() :
+	type.texture = CharacterInformation.type

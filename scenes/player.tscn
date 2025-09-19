@@ -1,8 +1,10 @@
-[gd_scene load_steps=54 format=3 uid="uid://bywnjkjonysu8"]
+[gd_scene load_steps=56 format=3 uid="uid://bywnjkjonysu8"]
 
 [ext_resource type="Script" uid="uid://d50thx5es5ms" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://da3p0h7t36he4" path="res://scenes/mark.tscn" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://dtmx50dr0j6bm" path="res://assets/tempassets/Alex_16x16.png" id="2_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://30yu5kl40dca" path="res://assets/tempassets/Outfit/Outfit_1.png" id="4_dqkch"]
+[ext_resource type="Texture2D" uid="uid://cujowj3sdjsde" path="res://assets/tempassets/Type/Male.png" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
 atlas = ExtResource("2_qhqgy")
@@ -395,15 +397,27 @@ mark_scene = ExtResource("2_dqkch")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_sc3ue")
-animation = &"idle_up"
-autoplay = "idle_up"
-frame_progress = 0.351123
+animation = &"idle_down"
+autoplay = "idle_down"
 offset = Vector2(0, -5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 100.0
 one_shot = true
+
+[node name="Customizable" type="Node2D" parent="."]
+
+[node name="Outfit" type="Sprite2D" parent="Customizable"]
+texture_filter = 1
+position = Vector2(0, 2)
+texture = ExtResource("4_dqkch")
+
+[node name="Type" type="Sprite2D" parent="Customizable"]
+texture_filter = 1
+position = Vector2(0, 2)
+texture = ExtResource("5_qlg0r")
