@@ -4,14 +4,14 @@ extends CharacterBody2D
 @onready var timer: Timer = $Timer
 @export var code_editor : Node2D
 @export var mark_scene : PackedScene
-const STEP = 48 # 1 tile size
+
+const STEP = 48
 enum DIRECTION {LEFT, RIGHT, UP, DOWN}
 
 var reset_pos
 var direction = DIRECTION.UP
 var is_moving = false
 var target_pos = Vector2.ZERO
-
 
 func set_movement(command: String):
 	is_moving = true
@@ -74,8 +74,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = Vector2.ZERO
 
-
-
 func reset():
 	global_position = reset_pos
 	clear_marks()
@@ -84,8 +82,6 @@ func create_mark(target_pos):
 	var mark = mark_scene.instantiate()
 	mark.global_position = target_pos + Vector2(0, 20)
 	get_parent().find_child("Marks").add_child(mark)
-
-
 
 func clear_marks():
 	var marks = get_parent().find_child("Marks")
