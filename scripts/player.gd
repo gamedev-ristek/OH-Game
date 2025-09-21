@@ -47,7 +47,8 @@ func set_movement(command: String):
 	create_mark(target_pos)
 
 func _ready() -> void:
-	reset_pos = global_position
+	#reset_pos = global_position
+	pass
 
 func _process(delta: float) -> void:
 	if is_moving and global_position.distance_to(target_pos) < 1:
@@ -74,9 +75,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = Vector2.ZERO
 
-func reset():
-	global_position = reset_pos
-	clear_marks()
+#func reset():
+	#global_position = reset_pos
+	#clear_marks()
 	
 func create_mark(target_pos):
 	var mark = mark_scene.instantiate()

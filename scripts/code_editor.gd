@@ -117,7 +117,7 @@ func on_execute_next_command():
 		player.set_movement(command)
 
 func reset():
-	player.reset()
+	#player.reset()
 	command_queue.clear()
 	command_lines.clear()
 	current_execution_result.clear()
