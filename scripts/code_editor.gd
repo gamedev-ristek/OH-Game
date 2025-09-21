@@ -1,51 +1,81 @@
-extends  Node2D
+extends Node2D
+
 var player: CharacterBody2D
 @onready var code_box: CodeEdit = $CodeBox
 
 var last_line := 0
 var command_queue: Array = []
 var command_lines: Array = []
+var current_execution_result: Dictionary = {}
+
 signal execute_next_command
+
 func _ready() -> void:
 	player = get_parent().find_child("Player")
+	
 	connect("execute_next_command", on_execute_next_command)
+	NetworkManager.code_execution_finished.connect(_on_python_execution_finished)
+	NetworkManager.connection_established.connect(_on_backend_connected)
+
+func _on_backend_connected():
+	print("backend ready")
+
 func _on_run_button_pressed() -> void:
 	reset()
-	var commands := {}
-	
-	for i in range(code_box.get_line_count()):
-		var line_text = code_box.get_line(i).strip_edges(false)
+	execute_with_python_backend()
 
-		if line_text == "" or line_text.begins_with("#"):
-			continue
-		var is_valid = false
+func execute_with_python_backend():
+	var code_text = code_box.text
+	
+	if code_text.strip_edges() == "":
+		print("no code to execute")
+		return
+	
+	if not NetworkManager.is_connected:
+		print("not connected to python")
+		return
+
+	NetworkManager.send_code_for_execution(code_text)
+
+func _on_python_execution_finished(result: Dictionary):
+	current_execution_result = result
+	
+	if result.success:
+		print("execution successful!")
+		print("actions: ", result.actions)
+		print("char position: ", result.player_position)
 		
-		var valid_syntax = ["player.move_up", "player.move_down", "player.move_left", "player.move_right"]
-		# TODO ganti bagian cek argumen agar tida	k cuma jika arg angka
-		for syntax in valid_syntax:
-			if line_text == "player":
-				is_valid = true
-				break
-			if line_text.begins_with(syntax + "(") and line_text.ends_with(")"):
-				var arg_str = line_text.substr(syntax.length() + 1, line_text.length() - syntax.length() - 2)
-				
-				# Kalau kosong atau angka, valid
-				if arg_str == "" or arg_str.is_valid_int():
-					is_valid = true
-				break
+		convert_python_actions_to_commands(result.actions)
 
-		if is_valid:
-			commands[i] = line_text
+		if not command_queue.is_empty():
+			on_execute_next_command()
 		else:
-			commands[i] = "ERROR"
+			done_executing()
+	else:
+		print("execution failed: ", result.error)
+		
+		if result.has("error_line"):
+			executing_line(result.error_line, true)
+		
+		done_executing()
+
+func convert_python_actions_to_commands(actions: Array):
+	command_queue.clear()
+	command_lines.clear()
 	
-	for key in commands:
-		var command = commands[key]
-		command_queue.append(command)
-		command_lines.append(key)
-	on_execute_next_command()
+	for action in actions:
+		if action.type == "move":
+			var direction = action.direction
+			var steps = action.get("steps", 1)
+			
+			var command = "player.move_" + direction + "(" + str(steps) + ")"
+			command_queue.append(command)
+			command_lines.append(-1)
 
 func executing_line(line_number: int, is_error := false):
+	if line_number < 0:
+		return
+		
 	code_box.set_line_background_color(last_line, Color(0, 0, 0, 0))
 
 	code_box.clear_executing_lines()
@@ -60,10 +90,13 @@ func done_executing():
 	$Timer.start()
 	await $Timer.timeout
 	code_box.clear_executing_lines()
-	code_box.set_line_background_color(last_line, Color(0, 0, 0, 0))
+	if last_line >= 0:
+		code_box.set_line_background_color(last_line, Color(0, 0, 0, 0))
+	
+	if current_execution_result.has("valid_commands"):
+		print("execution completed, valid commands: ", current_execution_result.valid_commands)
 	
 func on_execute_next_command():
-
 	if player == null:
 		return
 	if command_queue.is_empty():
@@ -79,15 +112,12 @@ func on_execute_next_command():
 		return
 		
 	executing_line(command_line)
+	
 	if command.begins_with("player.move"):
 		player.set_movement(command)
 
 func reset():
 	player.reset()
-	
 	command_queue.clear()
 	command_lines.clear()
-	
-	
-	
-	
+	current_execution_result.clear()
