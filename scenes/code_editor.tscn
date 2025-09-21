@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://k00yxy533m0m"]
 
 [ext_resource type="Script" uid="uid://dwptov480eb1o" path="res://scripts/code_editor.gd" id="1_q0psu"]
-[ext_resource type="Script" uid="uid://bk6mdvwax0w12" path="res://scripts/code_box.gd" id="2_i4sis"]
+[ext_resource type="Script" uid="uid://bk6mdvwax0w12" path="res://code_box.gd" id="2_i4sis"]
 
 [node name="CodeEditor" type="Node2D"]
 script = ExtResource("1_q0psu")

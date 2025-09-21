@@ -5,7 +5,6 @@ var player: CharacterBody2D
 var last_line := 0
 var command_queue: Array = []
 var command_lines: Array = []
-var cur_indentation_level = 0
 signal execute_next_command
 func _ready() -> void:
 	player = get_parent().find_child("Player")
@@ -16,23 +15,12 @@ func _on_run_button_pressed() -> void:
 	
 	for i in range(code_box.get_line_count()):
 		var line_text = code_box.get_line(i).strip_edges(false)
-		
-		var leading_spaces = ""
-		for j in line_text:
-			if j != " ":
-				break
-			leading_spaces += j
 
-		var words = line_text.split(" ", false)
-		for j in range(words.size()):
-			words[j] = words[j].replace("\t", "    ")
-		line_text = leading_spaces + " ".join(words)
-		print(line_text)
 		if line_text == "" or line_text.begins_with("#"):
 			continue
 		var is_valid = false
 		
-		var valid_syntax = ["player.move_up", "player.move_down", "player.move_left", "player.move_right", "for i in range :"]
+		var valid_syntax = ["player.move_up", "player.move_down", "player.move_left", "player.move_right"]
 		# TODO ganti bagian cek argumen agar tida	k cuma jika arg angka
 		for syntax in valid_syntax:
 			if line_text == "player":
@@ -41,6 +29,7 @@ func _on_run_button_pressed() -> void:
 			if line_text.begins_with(syntax + "(") and line_text.ends_with(")"):
 				var arg_str = line_text.substr(syntax.length() + 1, line_text.length() - syntax.length() - 2)
 				
+				# Kalau kosong atau angka, valid
 				if arg_str == "" or arg_str.is_valid_int():
 					is_valid = true
 				break
