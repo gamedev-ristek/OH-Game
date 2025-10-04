@@ -1,5 +1,7 @@
 extends CodeEdit
+
 var colorText = CodeHighlighter.new()
+
 func _ready():
 	
 	text_changed.connect(code_request_code_completion)
@@ -11,17 +13,11 @@ func _ready():
 	
 	colorText.symbol_color = Color.WHITE
 	
-	# keyword highlight
 	colorText.add_keyword_color("player", Color.MEDIUM_PURPLE)
 	
-	# string highlight
 	colorText.add_color_region("\"", "\"", Color("#489E7C"))
 	colorText.add_color_region("'", "'", Color("#489E7C"))
-	# comment highlight
 	colorText.add_color_region("#", "", Color(0.5, 0.5, 0.5))
-	
-	
-	
 
 func _process(delta):
 	pass
@@ -40,4 +36,3 @@ func code_request_code_completion():
 	add_code_completion_option(CodeEdit.KIND_FUNCTION, "player.move_down(steps)", "player.move_down()")
 	
 	update_code_completion_options(true)
-	

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Python Code Combat</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <script type="text/javascript">
+        // Fungsi callback untuk Godot
+        function godotExecutePythonResult(result) {
+            if (typeof Engine !== 'undefined') {
+                Engine.godotExecutePythonResult(result);
+            }
+        }
+        
+        function godotExecutePythonError(error) {
+            if (typeof Engine !== 'undefined') {
+                Engine.godotExecutePythonError(error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script src="YOUR_GAME.js"></script>
+    <script>
+        // Inisialisasi Pyodide
+        let pyodide;
+        async function loadPyodide() {
+            pyodide = await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
+            });
+            await pyodide.loadPackage(["micropip"]);
+            console.log("Pyodide loaded successfully");
+        }
+        loadPyodide();
+    </script>
+</body>
+</html>

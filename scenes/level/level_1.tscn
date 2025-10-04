@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://3bjtrfkli16r"]
+[gd_scene load_steps=5 format=3 uid="uid://3bjtrfkli16r"]
 
 [ext_resource type="PackedScene" uid="uid://k00yxy533m0m" path="res://scenes/code_editor.tscn" id="1_cfjva"]
 [ext_resource type="PackedScene" uid="uid://bywnjkjonysu8" path="res://scenes/player.tscn" id="2_2lb6k"]
+[ext_resource type="Texture2D" uid="uid://ckca0i1jek1tt" path="res://icon.svg" id="3_ybxn4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xbhhu"]
+size = Vector2(123, 124)
 
 [node name="Level_1" type="Node2D"]
 
-[node name="Player" parent="." node_paths=PackedStringArray("code_editor") instance=ExtResource("2_2lb6k")]
-code_editor = NodePath("../CodeEditor")
+[node name="Player" parent="." instance=ExtResource("2_2lb6k")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 1)
@@ -15,3 +18,13 @@ position = Vector2(0, 1)
 position = Vector2(398, -33)
 
 [node name="Marks" type="Node2D" parent="."]
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(0, -176)
+texture = ExtResource("3_ybxn4")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Icon"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Icon/StaticBody2D"]
+position = Vector2(-1.5, -1)
+shape = SubResource("RectangleShape2D_xbhhu")
