@@ -18,7 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 CharacterInformation="*res://scripts/global/character_information.gd"
-NetworkManager="*res://scripts/global/NetworkManager.gd"
+NetworkManager="res://scripts/global/NetworkManager.gd"
+CodeExecutor="*res://scripts/global/code_executor.gd"
 
 [display]
 
